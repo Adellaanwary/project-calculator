@@ -29,7 +29,31 @@ class Calculator {
     this.previousOperand = this.currentOperand
     this.currentOperand = ''
   }
-
+  percent(){
+    let computation
+    const prev = parseFloat(this.previousOperand)
+    const current = parseFloat(this.currentOperand)
+    if (isNaN(prev) || isNaN(current)) return
+    switch (this.operation) {
+      case '+' && '%':
+        computation = prev + current/100
+        break
+      case '-':
+        computation = prev - current/100
+        break
+      case '*':
+        computation = prev * current/100
+        break
+      case '÷':
+        computation = prev / current/100
+        break
+      default:
+        return
+    }
+    this.currentOperand = computation
+    this.operation = undefined
+    this.previousOperand = ''
+  }
   compute() {
     let computation
     const prev = parseFloat(this.previousOperand)
@@ -93,7 +117,7 @@ const deleteButton = document.querySelector('[data-delete]')
 const allClearButton = document.querySelector('[data-all-clear]')
 const previousOperandTextElement = document.querySelector('[data-previous-operand]')
 const currentOperandTextElement = document.querySelector('[data-current-operand]')
-
+const percentButtons = document.querySelectorAll('[data-percent]')
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement)
 
 numberButtons.forEach(button => {
@@ -122,5 +146,10 @@ allClearButton.addEventListener('click', button => {
 
 deleteButton.addEventListener('click', button => {
   calculator.delete()
+  calculator.updateDisplay()
+})
+
+percentButtons.addEventListener('click', button =>{
+  calculator.percent()
   calculator.updateDisplay()
 })
